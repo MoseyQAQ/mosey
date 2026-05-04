@@ -1,0 +1,4 @@
+interface:
+  display_name: "XHS Paper Share"
+  short_description: "Draft Xiaohongshu-style paper notes"
+  default_prompt: "Use $xhs to turn this paper PDF or webpage into a concise Xiaohongshu literature-sharing post."
