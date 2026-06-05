@@ -1,0 +1,4 @@
+interface:
+  display_name: "Coding Style"
+  short_description: "Write readable, physically faithful research code"
+  default_prompt: "Use $coding-style to write a concise, physically explicit research script."

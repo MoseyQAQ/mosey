@@ -1,0 +1,4 @@
+interface:
+  display_name: "Plot"
+  short_description: "Create compact scientific Matplotlib plots"
+  default_prompt: "Use $plot to create a compact, physically explicit Matplotlib plotting script."

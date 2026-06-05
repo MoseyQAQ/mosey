@@ -18,7 +18,7 @@ Produce one publishable Xiaohongshu-style Chinese paper-sharing post from a PDF 
 
 ## Output Rules
 
-- Title format must be exactly: `文献精读|XXXX`
+- Title format must be exactly: `📝文献精读 | XXXX`
 - Make `XXXX` short, concrete, faithful to the paper, and as eye-catching as possible without exaggeration.
 - Keep the full post under 1000 Chinese characters; 600-800 Chinese characters is ideal.
 - Use simplified Chinese by default. Keep technical English terms when they are standard in the field.

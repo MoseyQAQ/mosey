@@ -1,0 +1,4 @@
+interface:
+  display_name: "Coding API"
+  short_description: "Use Mosey's preferred scientific Python APIs"
+  default_prompt: "Use $coding-api to choose familiar ASE, ferrodispcalc, NumPy, and Matplotlib APIs for this research script."

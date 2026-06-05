@@ -1,0 +1,45 @@
+# 1.0-column width: max 3.5 in
+# 2.0-column width: max 7.2 in
+# 1.5-column width: 4.72-5.36 in
+
+figure.dpi: 600
+
+# Font
+font.sans-serif: arial
+mathtext.fontset: custom
+mathtext.fallback: stixsans
+font.size: 5.5
+
+# Axes
+axes.labelsize: 6.0
+xtick.labelsize: 5.5
+ytick.labelsize: 5.5
+axes.linewidth: 0.6
+grid.linewidth: 0.6
+xtick.major.width: 0.6
+ytick.major.width: 0.6
+xtick.minor.width: 0.6
+ytick.minor.width: 0.6
+axes.labelpad: 2.4
+xtick.major.size: 2.4
+ytick.major.size: 2.4
+xtick.minor.size: 1.8
+ytick.minor.size: 1.8
+xtick.major.pad: 1.2
+ytick.major.pad: 1.2
+
+# Line
+lines.linewidth: 0.6
+lines.markeredgewidth: 0.5
+lines.markersize: 4.0
+
+# Legend
+legend.fontsize: 7.5
+legend.edgecolor: C7
+legend.numpoints: 1
+legend.framealpha: 1.0
+legend.handlelength: 1.8
+legend.labelspacing: 1.0
+legend.handletextpad: 0.35
+legend.borderpad: 0.35
+legend.borderaxespad: 0.35

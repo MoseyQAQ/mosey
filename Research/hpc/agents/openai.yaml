@@ -1,0 +1,4 @@
+interface:
+  display_name: "HPC"
+  short_description: "Use Mosey's preferred HPC Python and Slurm setup"
+  default_prompt: "Use $hpc before running Python, tests, or Slurm commands on my HPC environments."
