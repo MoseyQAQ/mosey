@@ -14,6 +14,8 @@ Use this skill for research code, not production services. The priority is reada
 - Avoid excessive validation, defensive branching, framework-like abstractions, and reusable-package ceremony unless the user asks for a package.
 - Keep the main flow visible from top to bottom.
 - Use helper functions only when they remove real repetition or isolate a physically meaningful operation.
+- Before editing, inspect nearby scripts for local conventions and data flow. Use them as context and style hints, but do not blindly copy confusing or physically unclear patterns.
+- For known-input one-off scripts, optimize first for a short, inspectable main flow, not for future reuse as a general tool.
 
 ## Physical Correctness
 
@@ -52,6 +54,18 @@ For one-off scripts, prefer a direct structure:
 ```
 
 Place easily edited values near the top: paths, selected frames, selected columns, atom/site selections, units, conversion constants, component names, fitting ranges, and output filenames.
+
+For known-input one-off scripts, the first version should usually be close to a
+30-line readable main flow. Prefer hard-coded local paths and explicit physical
+assumptions over command-line interfaces and reusable-tool structure.
+
+Do not add `argparse`, CLI options, frame-window controls, block/chunk controls,
+memmap/out-of-core machinery, or complex defensive validation unless the user
+explicitly asks for them or the script cannot run correctly without them.
+
+If input files are large or memory/IO may be expensive, mention that in the
+conversation first. Do not silently encode a resource-management strategy into
+the script unless requested or necessary for correctness.
 
 For multiple related scripts in the same conversation, put shared helpers in `conf.py` and import them from side scripts. Do this only when it reduces duplicated logic.
 
