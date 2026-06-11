@@ -45,6 +45,8 @@ If a choice is unclear, ask the user instead of guessing. If the choice is made 
 For one-off scripts, prefer a direct structure:
 
 ```python
+# Short header: purpose, physical formula, notes
+
 # Hard-coded variables
 
 # Load data
@@ -55,6 +57,11 @@ For one-off scripts, prefer a direct structure:
 ```
 
 Place easily edited values near the top: paths, selected frames, selected columns, atom/site selections, units, conversion constants, component names, fitting ranges, and output filenames.
+
+For scientific analysis scripts, start with a short header comment or docstring
+that states: (1) the script's core purpose, (2) the relevant physical formulae,
+and (3) other interpretation notes such as filters, boundary conditions, units,
+normalization, or assumptions. Keep it concise and physically useful.
 
 For known-input one-off scripts, the first version should usually be close to a
 30-line readable main flow. Prefer hard-coded local paths and explicit physical
