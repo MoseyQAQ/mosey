@@ -12,6 +12,7 @@ Use this skill for research code, not production services. The priority is reada
 - Prefer clarity and compactness over generality.
 - Treat most scripts as local research artifacts with known inputs.
 - Avoid excessive validation, defensive branching, framework-like abstractions, and reusable-package ceremony unless the user asks for a package.
+- When the user gives concrete local paths, output names, imports, or API contracts, preserve that simple contract. Do not replace it with `Path(__file__).resolve()` plumbing, compatibility import fallbacks, cwd-independent wrappers, or guessed alternate APIs unless the user asks for that engineering layer.
 - Keep the main flow visible from top to bottom.
 - Use helper functions only when they remove real repetition or isolate a physically meaningful operation.
 - Before editing, inspect nearby scripts for local conventions and data flow. Use them as context and style hints, but do not blindly copy confusing or physically unclear patterns.
@@ -58,6 +59,10 @@ Place easily edited values near the top: paths, selected frames, selected column
 For known-input one-off scripts, the first version should usually be close to a
 30-line readable main flow. Prefer hard-coded local paths and explicit physical
 assumptions over command-line interfaces and reusable-tool structure.
+
+If a user-provided API or import appears wrong in the current environment, report
+the mismatch or ask before substituting a different module path. Do not silently
+add `try/except ImportError` fallbacks in one-off research scripts.
 
 Do not add `argparse`, CLI options, frame-window controls, block/chunk controls,
 memmap/out-of-core machinery, or complex defensive validation unless the user
