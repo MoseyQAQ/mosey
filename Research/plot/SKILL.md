@@ -39,6 +39,8 @@ import matplotlib.pyplot as plt
 plt.style.use("nature.mplstyle")
 ```
 
+- If using this skill's bundled style from outside the skill directory, use that single known style path directly. Do not add runtime discovery logic such as checking the current directory, probing user-home paths, or fallback style paths unless the user explicitly requests portable scripts.
+
 - Save PNG files only by default.
 - Always save with `dpi=600`.
 - Always save with `bbox_inches="tight"`.

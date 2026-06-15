@@ -17,6 +17,7 @@ Use this skill for research code, not production services. The priority is reada
 - Use helper functions only when they remove real repetition or isolate a physically meaningful operation.
 - Before editing, inspect nearby scripts for local conventions and data flow. Use them as context and style hints, but do not blindly copy confusing or physically unclear patterns.
 - For known-input one-off scripts, optimize first for a short, inspectable main flow, not for future reuse as a general tool.
+- Keep validation-environment fixes out of saved scripts. Do not add environment-variable mutations, cache-directory setup, warning filters, backend switches, fallback path searches, or similar harness code just to silence warnings or make the current sandbox cleaner. If needed, put those settings only in the validation command or report them as environment warnings.
 
 ## Physical Correctness
 
@@ -78,6 +79,8 @@ explicitly asks for them or the script cannot run correctly without them.
 If input files are large or memory/IO may be expensive, mention that in the
 conversation first. Do not silently encode a resource-management strategy into
 the script unless requested or necessary for correctness.
+
+Before finalizing a one-off script, scan for non-scientific scaffolding and remove it unless explicitly requested: environment-variable mutations, cache/config directory setup, fallback style or data path discovery, broad `try/except` compatibility logic, CLI ceremony, and portability wrappers.
 
 For multiple related scripts in the same conversation, put shared helpers in `conf.py` and import them from side scripts. Do this only when it reduces duplicated logic.
 
