@@ -23,6 +23,8 @@ Research/hpc/scripts/detect-hpc-env.sh
 
 Use the detector output as the default environment choice. If the current repo, user command, or active environment clearly requires a different Python, follow that local requirement and briefly state the reason.
 
+On SAI (`login-01.mr-sai.ai`), prefer non-login command execution with `login=false` for routine shell commands. The default login shell can source `/opt/envs/bash.profile`, which prints cluster status and account usage and may add tens of seconds of startup latency. For many consecutive SAI commands, prefer opening one persistent shell, ideally `bash --noprofile --norc`, and reuse it instead of starting a fresh login shell each time.
+
 ## Python Defaults
 
 Host-specific Python paths are preferred, not mandatory:
