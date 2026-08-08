@@ -9,7 +9,7 @@ sbatch_templates=""
 case "$host" in
   login-01.mr-sai.ai|SAI)
     profile="sai"
-    python_path="/home/wlu-liushi/lidenan/soft/conda/bin/python3"
+    python_path="/home/lidenan/workdir_wlu-liushi/lidenan/soft/conda/bin/python3"
     sbatch_templates="/opt/sbatch_examples"
     ;;
   login0*.cluster.com)

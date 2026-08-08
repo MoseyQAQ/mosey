@@ -1,6 +1,6 @@
 ---
 name: hpc
-description: Use as background context for Mosey's HPC work, especially before running shell commands, Python scripts, tests, Slurm commands, or environment setup on known SAI, cluster.com, or liutheory HPC login hosts. Helps Codex identify the host with hostname, choose the preferred Python executable, find Slurm template directories, and avoid unsafe package installs or unsolicited job submission.
+description: Use as background context for Mosey's HPC work, especially before running shell commands, Python scripts, tests, Slurm commands, or environment setup on known SAI, cluster.com, or liutheory HPC login hosts. Helps Codex identify the host with hostname, choose the preferred Python executable, verify current SAI partitions and QOS, find Slurm template directories, and avoid unsafe package installs or unsolicited job submission.
 ---
 
 # HPC
@@ -29,7 +29,7 @@ On SAI (`login-01.mr-sai.ai`), prefer non-login command execution with `login=fa
 
 Host-specific Python paths are preferred, not mandatory:
 
-- `login-01.mr-sai.ai` or `SAI`: `/home/wlu-liushi/lidenan/soft/conda/bin/python3`
+- `login-01.mr-sai.ai` or `SAI`: `/home/lidenan/workdir_wlu-liushi/lidenan/soft/conda/bin/python3`
 - `login0*.cluster.com`: `~/software/miniconda3/bin/python3`
 - `mgmt-01.hpc.liutheory.westlake.edu.cn`: `/home/liushiLab/lidenan/soft/conda/envs/fdc/bin/python3`
 
@@ -57,11 +57,17 @@ When Slurm work is requested, inspect the host-specific template directory first
 
 Do not invent partition, QoS, CPU, memory, GPU, or module defaults when templates are available. Let the templates carry site-specific Slurm policy.
 
+On SAI, read `references/sai-current-resources-qos.md` before choosing resources. Refresh its volatile capacity, partition/QOS compatibility, QOS limits, and account association with the read-only commands listed there. Prefer live Slurm configuration, then `/opt/sbatch_examples`, then the dated reference snapshot. Treat the generated SAI reference skills as background only when they disagree with those sources.
+
 ## References
 
 Read `references/hpc-environments.md` when you need the full host table, policy notes, or local reference-document paths.
 
-For SAI and Slurm details, consult the local generated reference skills only as needed:
+For current SAI resources, QOS, and verification commands, read:
+
+- `references/sai-current-resources-qos.md`
+
+For broader SAI background, consult the local generated reference skills only as needed. They cannot currently be corrected at their upstream source and may contain stale resource or QOS snapshots:
 
 - `references/sai-user-guide/SKILL.md`
 - `references/sai-user-guide/references/任务提交和管理.md`
