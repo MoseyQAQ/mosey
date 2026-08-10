@@ -32,6 +32,7 @@ Host-specific Python paths are preferred, not mandatory:
 - `login-01.mr-sai.ai` or `SAI`: `/home/lidenan/workdir_wlu-liushi/lidenan/soft/conda/bin/python3`
 - `login0*.cluster.com`: `~/software/miniconda3/bin/python3`
 - `mgmt-01.hpc.liutheory.westlake.edu.cn`: `/home/liushiLab/lidenan/soft/conda/envs/fdc/bin/python3`
+- `moseydeMacBook-Air.local`: `/Users/mosey/miniconda3/bin/python3`
 
 Use explicit Python invocations when possible:
 
