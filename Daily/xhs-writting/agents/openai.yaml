@@ -1,0 +1,4 @@
+interface:
+  display_name: "XHS 文献精读与学术族谱"
+  short_description: "Research paper posts and scholar genealogies with visual assets"
+  default_prompt: "Use $xhs-writting to turn this paper or scholar name into a grounded Chinese Xiaohongshu post with the required titles and visual assets."
