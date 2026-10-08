@@ -9,7 +9,7 @@ description: "Write Chinese Xiaohongshu research posts in two modes: paper readi
 
 ## 模式与职责
 
-- **文献精读**：阅读 [paper.md](references/paper.md)，完成正文与 6 个候选标题。
+- **文献精读**：阅读 [paper.md](references/paper.md)，完成正文与 6 个候选标题。末段只概括作者在论文中明确讨论的结论，不自行追加评价、局限或展望。
 - **学术族谱**：阅读 [genealogy.md](references/genealogy.md)，依次调研并写入 `note.md`、制作关系图和人物封面、写入 `xhs.md`。制图时读取 [genealogy-visuals.md](references/genealogy-visuals.md)。
 - 完整写作示例见 [format-and-examples.md](references/format-and-examples.md)。只加载当前任务需要的示例和视觉参考。
 - 项目 `AGENTS.md` 管目录、文件命名和论文截图。本 skill 管内容调研、写作及人物配图；`xhs-push` 管实际发布。
@@ -21,8 +21,8 @@ description: "Write Chinese Xiaohongshu research posts in two modes: paper readi
 - 对完整 `xhs.md` 做 Unicode 字符计数（包括标题、标点、英文、标签和换行），不要仅数汉字或字节。平台的最终输入校验由发布模块负责。
 - 最终稿实际保存到工作目录的 `xhs.md`；用户指定其他输出路径时从其要求。研究细节保存在 `note.md`，不要混入待发布正文。
 - 不编造人物关系、引用数、职位、论文结果和图中信息。区分直接证据与自己的研究主线归纳；不要把合作成果全部归为一个人。
-- 不套用“颠覆认知”“打开新纪元”等宣传句；不强制以“最值得记住”再复述结论。
-- 用户选定或提供的标题优先。文献标题必须保留 `📝文献精读 | ` 前缀；人物标题使用 `学术族谱｜{姓名}`。
+- 不套用“颠覆认知”“打开新纪元”等宣传句；文献稿不在结论后另加“最值得记住”等自行发挥的总结口号。
+- 用户选定或提供的标题优先。文献标题直接按文章主题写，说明研究对象、做了什么或主要结果；不加“📝文献精读”等固定栏目或 emoji 前缀，不使用问句或问号（`？`、`?`）。人物标题使用 `学术族谱｜{姓名}`。
 
 ## 指标的内部记录与公开呈现
 
