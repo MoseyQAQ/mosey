@@ -1,77 +1,53 @@
 ---
 name: hpc
-description: Use as background context for Mosey's HPC work, especially before running shell commands, Python scripts, tests, Slurm commands, or environment setup on known SAI, cluster.com, or liutheory HPC login hosts. Helps Codex identify the host with hostname, choose the preferred Python executable, verify current SAI partitions and QOS, find Slurm template directories, and avoid unsafe package installs or unsolicited job submission.
+description: Use when preparing, running, or checking Mosey's research computations on SAI, cluster.com, or liutheory HPC systems. Covers minimal research artifacts, Python environments, Slurm resource selection, and execution within the user's authorized scope.
 ---
 
 # HPC
 
-Use this skill to keep HPC command execution boring and predictable.
+Respect the user's organization of their research directories. Complete the task with only the files and operations it needs.
 
-## First Step
+## Directories and Artifacts
 
-Before running Python, tests, or Slurm-related commands in an HPC shell, identify the host:
+- Do not create artifacts without a concrete need. Reuse existing directories, files, and naming conventions instead of adding a separate structure for managing the assistant's work.
+- Keep only requested deliverables and the inputs, scripts, data, and logs needed to run, analyze, reproduce, or resume the work. Unless requested, do not add task ledgers, status inventories, mapping tables, comparison reports, or explanatory files solely to document the assistant's process, such as `jobs.json`, `mapping.txt`, `compare.json`, or `completed.json`.
+- Judge necessity by purpose, not by filename or extension. Keep mappings required by the computation, necessary logs, and checkpoints. Do not duplicate information already available directly from existing results.
+- Remove temporary helper files when finished with them. Only remove files created during this task that are no longer useful; do not reorganize, move, or delete the user's existing files or files still needed by running jobs.
+- Put units, column definitions, key parameters, and other scientific context in existing inputs, scripts, or data headers where practical, rather than creating separate documentation.
+- Report results, their locations, and material limitations briefly in the conversation. Do not also save a report unless requested or needed as a task deliverable. Do not ask for approval for each necessary file.
+- If the user explicitly designates a directory as a playground or authorizes open exploration there, organize scripts, intermediate results, and records as the exploration requires. This freedom applies only to that directory and task. Identify the main results at handoff and remove temporary artifacts that no longer serve a purpose. Broad autonomy does not require more files.
 
-```bash
-hostname
-```
+## Language
 
-Prefer running the bundled detector when available:
+- Use Chinese by default for reports, explanations, text-data headers, and explanatory comments that the task actually requires.
+- Preserve physical symbols, units, program keywords, fields required by existing parsers, and native software logs. Do not break compatibility to translate them.
+- This language preference does not justify adding reports, explanations, or headers. Preserve the user's requested data format.
 
-```bash
-Research/hpc/scripts/detect-hpc-env.sh
-```
+## Environment
 
-Use the detector output as the default environment choice. If the current repo, user command, or active environment clearly requires a different Python, follow that local requirement and briefly state the reason.
+- Use `hostname` when the host is unclear. Reuse confirmed information in the same environment; recheck relevant details after changing hosts or environments.
+- Follow the user's or project's Python requirement first; otherwise use the defaults below. Invoke the interpreter explicitly. Diagnose an unavailable interpreter before choosing another; do not switch silently.
+- On SAI, use a non-login shell for routine commands (`login=false` when supported) to avoid repeated login initialization.
+- Obtain authorization before installing packages or modifying shared environments or shell startup files. Do not ask again when the existing authorization already covers the action.
 
-On SAI (`login-01.mr-sai.ai`), prefer non-login command execution with `login=false` for routine shell commands. The default login shell can source `/opt/envs/bash.profile`, which prints cluster status and account usage and may add tens of seconds of startup latency. For many consecutive SAI commands, prefer opening one persistent shell, ideally `bash --noprofile --norc`, and reuse it instead of starting a fresh login shell each time.
-
-## Python Defaults
-
-Host-specific Python paths are preferred, not mandatory:
-
-- `login-01.mr-sai.ai` or `SAI`: `/home/lidenan/workdir_wlu-liushi/lidenan/soft/conda/bin/python3`
-- `login0*.cluster.com`: `~/software/miniconda3/bin/python3`
-- `mgmt-01.hpc.liutheory.westlake.edu.cn`: `/home/liushiLab/lidenan/soft/conda/envs/fdc/bin/python3`
-- `moseydeMacBook-Air.local`: `/Users/mosey/miniconda3/bin/python3`
-
-Use explicit Python invocations when possible:
-
-```bash
-<preferred-python> -m pytest
-<preferred-python> script.py
-<preferred-python> -c "import sys; print(sys.executable)"
-```
-
-If the preferred Python path is missing or fails, diagnose with `hostname`, `ls -l <path>`, and a minimal version check before falling back to another Python.
-
-Ask before installing any new package with `pip`, `conda`, `mamba`, or similar tools. Do not silently modify base environments or shell startup files such as `~/.bashrc`.
+| Host | Default Python | Slurm templates |
+| --- | --- | --- |
+| `login-01.mr-sai.ai` / `SAI` | `/home/lidenan/workdir_wlu-liushi/lidenan/soft/conda/bin/python3` | `/opt/sbatch_examples` |
+| `login0*.cluster.com` | `~/software/miniconda3/bin/python3` | `/home/liushiLab/share/sbatch_examples` |
+| `mgmt-01.hpc.liutheory.westlake.edu.cn` | `/home/liushiLab/lidenan/soft/conda/envs/fdc/bin/python3` | `/opt/sbatch_examples` |
+| `moseydeMacBook-Air.local` | `/Users/mosey/miniconda3/bin/python3` | Not applicable locally |
 
 ## Slurm
 
-These HPC environments use Slurm, but do not submit jobs proactively. Use `sbatch` or `srun` only when the user explicitly asks for Slurm submission or interactive allocation.
+- Interpret authorization from the task. Discussing a plan or preparing files does not authorize submission. An explicit request to run computations or tests includes the necessary `sbatch` submissions or `srun` allocations; the user need not name those commands. Do not expand the calculation or add unrelated jobs.
+- Reuse an existing project submission script that is known to fit the task. When creating or changing resource settings, consult the host's templates and adopt only the settings the task needs.
+- Do not guess partitions, QOS, or account permissions. When first selecting resources, changing configurations, or diagnosing submission failures, check the relevant partition, QOS, account, and resource limits. Reuse verified information within the task rather than repeating a full inventory for every job.
+- Current Slurm configuration and account permissions take precedence, followed by cluster templates. Static documentation is background only. Optional template settings need not be copied.
+- When creating or editing submission scripts, omit `--time` and `--chdir`; submit from the correct working directory. Omit `--output` and `--error` by default unless they provide a concrete benefit, such as compatibility with an existing log-reading workflow. Do not circumvent these conventions with short options, command-line overrides, or shell redirection.
+- Run computations and tests that require GPUs on allocated GPU nodes. Lack of CUDA on a login node is not a reason to skip required GPU validation.
+- Check job health and results as needed for the task. Successful submission, a running job, normal program termination, and scientific convergence are different conclusions; report only what the evidence supports.
 
-When Slurm work is requested, inspect the host-specific template directory first and adapt the closest template:
+## References on Demand
 
-- `login-01.mr-sai.ai` or `SAI`: `/opt/sbatch_examples`
-- `login0*.cluster.com`: `/home/liushiLab/share/sbatch_examples`
-- `mgmt-01.hpc.liutheory.westlake.edu.cn`: `/opt/sbatch_examples`
-
-Do not invent partition, QoS, CPU, memory, GPU, or module defaults when templates are available. Let the templates carry site-specific Slurm policy.
-
-On SAI, read `references/sai-current-resources-qos.md` before choosing resources. Refresh its volatile capacity, partition/QOS compatibility, QOS limits, and account association with the read-only commands listed there. Prefer live Slurm configuration, then `/opt/sbatch_examples`, then the dated reference snapshot. Treat the generated SAI reference skills as background only when they disagree with those sources.
-
-## References
-
-Read `references/hpc-environments.md` when you need the full host table, policy notes, or local reference-document paths.
-
-For current SAI resources, QOS, and verification commands, read:
-
-- `references/sai-current-resources-qos.md`
-
-For broader SAI background, consult the local generated reference skills only as needed. They cannot currently be corrected at their upstream source and may contain stale resource or QOS snapshots:
-
-- `references/sai-user-guide/SKILL.md`
-- `references/sai-user-guide/references/任务提交和管理.md`
-- `references/sai-user-guide/references/软件环境.md`
-- `references/sai-user-guide/references/快速开始.md`
-- `references/sai-user-guide/references/SAI用户特殊注意事项汇总.md`
+- Use [SAI resource and QOS queries](references/sai-current-resources-qos.md) for the checks relevant to the current question.
+- Consult `references/sai-user-guide/` for specific platform problems, `references/sai-account/` for account and billing questions, and `references/sai-overview/` for platform background. Do not load all manuals for routine computation. Their generated examples and old snapshots do not override this skill or current cluster configuration.

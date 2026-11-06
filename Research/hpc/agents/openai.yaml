@@ -1,4 +1,4 @@
 interface:
   display_name: "HPC"
-  short_description: "Use Mosey's preferred HPC Python and live Slurm policy"
-  default_prompt: "Use $hpc before running Python, tests, or Slurm commands, and verify current SAI partitions and QOS before selecting resources."
+  short_description: "Run research computations with minimal artifacts"
+  default_prompt: "Use $hpc to prepare or run this research task within the authorized scope, using the project's environment and only necessary files and Slurm settings."
