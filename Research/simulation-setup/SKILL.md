@@ -5,7 +5,7 @@ description: "Prepare or modify LAMMPS and VASP calculation inputs, or select fa
 
 # Simulation Setup
 
-Use Mosey's existing calculation practice as the starting point. Preserve familiar input organization and applicable settings while adapting them to the requested physics.
+Use Mosey's existing calculation practice as the starting point. User-provided and bundled reference inputs also encode preferred file organization, execution flow, and writing conventions. By default, copy the best-matching reference input and adapt it to the requested physics.
 
 ## Choose the Starting Point
 
@@ -19,7 +19,8 @@ When local context covers only part of the task, retain it and use the library f
 
 ## Adapt the Input
 
-- Preserve the selected input's sections, variable names, parameter placement, and output conventions where practical. Make focused changes instead of rewriting it into a different style or framework.
+- Preserve the selected input's sections, variable names, parameter placement, loop and restart workflow, filenames, and output conventions. Limit changes to user requirements, adaptation to the current system, and confirmed correctness issues. Explain the specific physical or technical reason for changes to the execution flow.
+- Keep additions tied to a concrete calculation need. Preserve a reference input's single-file organization by default. Add shared inputs, helper scripts, bookkeeping files, statistical outputs, extra equilibration stages, or analysis steps only when the user requests them or the calculation requires them. Perform verification during the work and keep delivered inputs direct, readable, and easy to edit by hand.
 - Reuse applicable numerical settings as a baseline. The VASP inputs are historical calculations that Mosey considers broadly useful starting points; they are preferred fallbacks, not mandatory settings or evidence of convergence for every system.
 - Resolve task-specific paths, potential files, element/type mappings, masses, initial or restart states, and output dependencies against the actual project. Historical absolute paths and placeholders are not ready-to-run defaults.
 - Make physical choices visible: units, coordinate/field directions, effective charges, ensemble, cell constraints, loading sequence, time step, and total duration. Do not silently transfer material-specific assumptions or silently change the model to make an example run.
