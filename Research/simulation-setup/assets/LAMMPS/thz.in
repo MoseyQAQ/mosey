@@ -1,0 +1,86 @@
+variable        NSTEPS          equal 20000
+variable        THERMO_FREQ     equal 10
+variable        TEMP            equal 100
+variable        DUMP_FREQ       equal 10
+variable        TAU_T           equal 1.0
+
+# ----- Pulse Parameters -----
+variable Ef     equal 1000e-5  # V/Angstrom (500 kV/cm)
+variable freq   equal 0.5e12   # 1 THz
+variable t0     equal 5e-12  # Center at 5 ps
+variable fwhm   equal 2e-12  # FWHM duration = 2 ps
+
+units           metal
+boundary        p p p
+atom_style      atomic
+newton          on
+
+neighbor        2.0 bin
+neigh_modify    every 1
+
+read_restart   ../eq.restart
+reset_timestep  0
+timestep        0.001 # 1 fs
+
+mass            1 195.08
+mass            2 207.20
+mass            3 47.867
+mass            4 15.999
+
+pair_style      mliap unified /home/wlu-liushi/lidenan/InterfaceUnderBias/MACE-al/iter.04/01.train/000/pto_stagetwo.model-mliap_lammps.pt 0
+pair_coeff      * * Pt Pb Ti O
+
+# E-Field Math
+# current_t: time in seconds. step is unitless, dt is ps, 1e-12 converts to s.
+variable current_t equal step*dt*1.0e-12
+
+# Envelope: Using FWHM formula
+# exp( -4*ln(2) * (t-t0)^2 / w^2 )
+variable envelope equal exp((-4*log(2)*(v_current_t-v_t0)^2)/(v_fwhm^2))
+
+# Carrier: Cosine centered at t0
+variable in_cos   equal cos(2*PI*v_freq*(v_current_t-v_t0))
+
+variable VALUEZ  equal v_Ef*v_envelope*v_in_cos
+
+group Pb type 2
+group Ti type 3
+group O  type 4
+
+variable Z_Pb equal 3.45
+variable Z_Ti equal 5.21
+variable Z_O  equal -(v_Z_Pb+v_Z_Ti)/3.0
+
+variable Pbfz equal v_Z_Pb*v_VALUEZ
+variable Tifz equal v_Z_Ti*v_VALUEZ
+variable Ofz  equal v_Z_O*v_VALUEZ
+
+variable nPb equal count(Pb)
+variable nTi equal count(Ti)
+variable nO  equal count(O)
+
+variable Ftot equal v_nPb*v_Pbfz + v_nTi*v_Tifz + v_nO*v_Ofz
+variable ntot equal v_nPb + v_nTi + v_nO
+variable delta equal v_Ftot/v_ntot
+
+variable Pbfz_corr equal v_Pbfz - v_delta
+variable Tifz_corr equal v_Tifz - v_delta
+variable Ofz_corr  equal v_Ofz  - v_delta
+
+fix fPb Pb addforce 0 0 v_Pbfz_corr
+fix fTi Ti addforce 0 0 v_Tifz_corr
+fix fO  O  addforce 0 0 v_Ofz_corr
+# end Efield
+# end Efield
+
+thermo_style    custom step temp pe ke etotal press vol lx ly lz v_VALUEZ v_Pbfz_corr
+thermo          ${THERMO_FREQ}
+
+dump            1 all custom ${DUMP_FREQ} eq.lammpstrj id type x y z
+dump_modify     1 sort id
+
+fix             1 all nvt temp ${TEMP} ${TEMP} ${TAU_T}
+
+run             ${NSTEPS}
+write_restart   eq.restart
+write_data      eq.data

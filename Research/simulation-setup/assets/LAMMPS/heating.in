@@ -1,0 +1,50 @@
+variable        NSTEPS          equal 50000
+variable        THERMO_FREQ     equal 10
+variable        DUMP_FREQ       equal 10
+variable        PRES            equal 1.0
+variable        TAU_T           equal 0.5
+variable        TAU_P           equal 1.0
+
+units           metal
+boundary        p p p
+atom_style      atomic
+newton          on
+
+neighbor        2.0 bin
+neigh_modify    every 1
+
+read_restart   300.restart
+
+mass            1 195.08
+mass            2 207.20
+mass            3 47.867
+mass            4 15.999
+
+pair_style      mliap unified /home/wlu-liushi/lidenan/InterfaceUnderBias/MACE-al/iter.04/01.train/000/pto_stagetwo.model-mliap_lammps.pt 0
+pair_coeff      * * Pt Pb Ti O
+
+thermo_style    custom step temp pe ke etotal press vol cella cellb cellc
+thermo          ${THERMO_FREQ}
+
+
+# Loop
+variable        TEMP index 350 400 450 500 550 600 650 700
+label           loop_temp
+reset_timestep  0
+
+dump            2 all custom ${DUMP_FREQ} ${TEMP}.lammpstrj id type x y z
+dump_modify     2 sort id
+log             ${TEMP}.log
+restart         10000 ${TEMP}.restart.*
+
+fix             1 all npt temp ${TEMP} ${TEMP} ${TAU_T} aniso ${PRES} ${PRES} ${TAU_P}
+run             ${NSTEPS}
+
+write_data      ${TEMP}.data
+write_restart   ${TEMP}.restart
+
+unfix      1
+undump     2
+
+next            TEMP
+jump            SELF loop_temp

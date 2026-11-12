@@ -7,6 +7,10 @@ description: "Use when Codex writes research Python code for Mosey that needs co
 
 Use this skill to choose familiar scientific Python APIs for Mosey's research code. Pair it with `$coding-style` for script philosophy and `$plot` for figure styling.
 
+## Context Priority
+
+Follow the user's current explicit requirements first, then relevant project code and nearby cases, then this skill's library preferences and examples. Inspect the existing imports and data flow before choosing APIs; preserve a suitable project approach instead of replacing it solely to match a default. Keep the API and dependency-confirmation rules below. Figure styling follows the fixed defaults in `$plot` unless the user explicitly requests a change.
+
 ## Library Preferences
 
 - Prefer `ase`, `ferrodispcalc`, `numpy`, and `matplotlib`.

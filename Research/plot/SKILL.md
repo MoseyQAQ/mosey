@@ -7,25 +7,14 @@ description: Create one-off scientific research plotting scripts with Matplotlib
 
 Create complete runnable plotting scripts, not fragmented snippets, unless the user explicitly asks for only a function or a patch. Prefer simple local scripts over reusable plotting libraries.
 
-## Core Approach
+## Code Organization
 
-- Treat these as temporary research plotting scripts, not packages.
-- Keep code direct, readable, and easy to edit.
-- Use light helper functions only when they reduce real repetition.
-- Avoid unnecessary defensive input checks for known local data.
-- Do not over-explain the code. If a physical assumption is involved, briefly state it before or after the code.
-- Separate scripts with structured comments:
-  - `# Hard-coded variables`
-  - `# Load data`
-  - `# Compute derived quantities`
-  - `# Plot figure`
-  - `# Save output`
-- Put easily modified values near the top under `# Hard-coded variables`: paths, filenames, selected columns, selected components, selected atom types, selected layers, conversion constants, fitting ranges, labels, figure size, and output filename.
+Use `$coding-style` for script structure, editable parameters near the top, and physical-assumption handling. Add `# Plot figure` before `# Save output`, and keep labels, figure size, and the output filename with the other editable parameters. Do not over-explain the code; briefly state physical assumptions before or after it.
+
+The visual defaults below remain fixed unless the user explicitly requests a change; nearby plotting styles do not override them.
 
 ## Physical Explicitness
 
-- Numerical correctness is not the same as physical correctness.
-- Make physically sensitive choices explicit: sign convention, unit conversion, normalization, mean subtraction, smoothing, fitting range, selected component, selected layer, selected atom type, selected time window, and similar choices.
 - Do not silently change signs, normalize data, take absolute values, remove negative values, smooth data, or mask data.
 - If a simple operation can change physical interpretation, add a short comment saying so.
 
@@ -80,103 +69,17 @@ colors = {
 }
 ```
 
-## Expected Patterns
+## Minimal Figure Pattern
 
-Single-panel default:
+Default single-panel size: `(3.4, 2.2)` inches. Use `(4, 2)` when it improves readability, or `(6.5, 2.0)` for a three-panel row.
 
 ```python
 fig, ax = plt.subplots(figsize=(3.4, 2.2))
 
-# plotting code
-
-plt.tight_layout()
-fig.savefig("figure-name.png", dpi=600, bbox_inches="tight")
-```
-
-Larger single-panel figure when it improves readability:
-
-```python
-fig, ax = plt.subplots(figsize=(4, 2))
-
-# plotting code
-
-plt.tight_layout()
-fig.savefig("figure-name.png", dpi=600, bbox_inches="tight")
-```
-
-Multi-panel figure:
-
-```python
-fig, axes = plt.subplots(1, 3, figsize=(6.5, 2.0))
-
-# plotting code
-
-plt.tight_layout()
-fig.savefig("figure-name.png", dpi=600, bbox_inches="tight")
-```
-
-Panel labels:
-
-```python
-ax.text(
-    0.02, 1.02, "(a)",
-    transform=ax.transAxes,
-    ha="left",
-    va="bottom",
-)
-```
-
-Open-circle data points and dashed fitting lines:
-
-```python
-ax.plot(x_fit, y_fit, "--", color="k", lw=0.8)
-ax.scatter(x, y, s=18, facecolors="none", edgecolors="k", linewidths=0.6)
-```
-
-Reference line:
-
-```python
-ax.axhline(0, color="gray", ls="--", lw=0.8)
-```
-
-## Short Template
-
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-
-plt.style.use("nature.mplstyle")
-
-
-# Hard-coded variables
-input_file = "data.dat"
-output_file = "figure-name.png"
-figsize = (3.4, 2.2)
-
-colors = {
-    "blue": "#2F6DB3",
-    "red": "#C9302C",
-    "black": "#000000",
-    "green": "#2E8B57",
-    "orange": "#E69F00",
-    "purple": "#7B3294",
-    "gray": "#7F7F7F",
-}
-
-
-# Load data
-
-
-# Compute derived quantities
-# Keep physical choices explicit: unit conversion, sign convention, normalization, averaging.
-
-
 # Plot figure
-fig, ax = plt.subplots(figsize=figsize)
-
-ax.tick_params(direction="in", top=True, right=True)
-ax.legend(frameon=False)
 
 plt.tight_layout()
-fig.savefig(output_file, dpi=600, bbox_inches="tight")
+fig.savefig("figure-name.png", dpi=600, bbox_inches="tight")
 ```
+
+Read [references/examples.md](references/examples.md) when a full script template, multi-panel layout, panel labels, or marker/fit examples are useful. The examples supplement the defaults above.

@@ -7,6 +7,10 @@ description: Use when Codex writes, edits, or reviews Mosey's research code, esp
 
 Use this skill for research code, not production services. The priority is readable, physically faithful code that Mosey can quickly inspect and modify.
 
+## Context Priority
+
+Follow the user's current explicit requirements first, then relevant project code and nearby cases, then this skill's defaults. Inspect local conventions and data flow before editing; do not blindly copy confusing or physically unclear patterns. For figures, retain the fixed defaults in `$plot` unless the user explicitly requests a change.
+
 ## Core Philosophy
 
 - Prefer clarity and compactness over generality.
@@ -15,8 +19,6 @@ Use this skill for research code, not production services. The priority is reada
 - When the user gives concrete local paths, output names, imports, or API contracts, preserve that simple contract. Do not replace it with `Path(__file__).resolve()` plumbing, compatibility import fallbacks, cwd-independent wrappers, or guessed alternate APIs unless the user asks for that engineering layer.
 - Keep the main flow visible from top to bottom.
 - Use helper functions only when they remove real repetition or isolate a physically meaningful operation.
-- Before editing, inspect nearby scripts for local conventions and data flow. Use them as context and style hints, but do not blindly copy confusing or physically unclear patterns.
-- For known-input one-off scripts, optimize first for a short, inspectable main flow, not for future reuse as a general tool.
 - Keep validation-environment fixes out of saved scripts. Do not add environment-variable mutations, cache-directory setup, warning filters, backend switches, fallback path searches, or similar harness code just to silence warnings or make the current sandbox cleaner. If needed, put those settings only in the validation command or report them as environment warnings.
 
 ## Physical Correctness
@@ -37,7 +39,8 @@ If a choice is unclear, ask the user instead of guessing. If the choice is made 
 
 - Save simple scalar or small table-like results to `.txt`.
 - Save complex results to `.npz` with clear key/value names.
-- Do not use CSV by default.
+- Do not use CSV by default. Use it only if the user explicitly asks or the downstream tool requires it.
+- Prefer clear data output over only printing results.
 - Save plots only when the task naturally asks for a figure or when a quick visual check is useful.
 - Include enough metadata in text headers or `.npz` keys to make units, selected frames, and major assumptions recoverable.
 
@@ -80,7 +83,7 @@ If input files are large or memory/IO may be expensive, mention that in the
 conversation first. Do not silently encode a resource-management strategy into
 the script unless requested or necessary for correctness.
 
-Before finalizing a one-off script, scan for non-scientific scaffolding and remove it unless explicitly requested: environment-variable mutations, cache/config directory setup, fallback style or data path discovery, broad `try/except` compatibility logic, CLI ceremony, and portability wrappers.
+Before finalizing a one-off script, remove unnecessary scaffolding according to the rules above.
 
 For multiple related scripts in the same conversation, put shared helpers in `conf.py` and import them from side scripts. Do this only when it reduces duplicated logic.
 
@@ -101,4 +104,4 @@ For multiple related scripts in the same conversation, put shared helpers in `co
 
 ## References
 
-Read `references/research-code-style.md` for detailed style guidance.
+Read [references/research-code-style.md](references/research-code-style.md) for clarification cases, output examples, and additional idioms when relevant.

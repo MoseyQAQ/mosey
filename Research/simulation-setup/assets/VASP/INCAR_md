@@ -1,0 +1,34 @@
+# General
+ISTART = 0
+ICHARG = 2
+LWAVE = .FALSE.
+LCHARG = .FALSE.
+LREAL = .FALSE.
+PREC = Accurate
+GGA = PS
+
+# Molecular dynamics
+ISIF = 2
+IBRION = 0
+POTIM = 1.0                  # time step in femto seconds 
+SMASS = 1.0                  # setting the virtual mass for the Nosé-Hoover thermostat
+NSW = 1000
+ISYM = 0
+TEBEG = 300
+TEEND = 300
+MDALGO = 2
+NBLOCK = 5
+KBLOCK = 1
+
+# Electronic optimization
+ENCUT = 800
+NELM = 120
+NELMIN = 4
+EDIFF = 1E-6
+ISMEAR = 0
+SIGMA = 0.05
+
+# K-points mesh
+KSPACING = 0.30
+KGAMMA = .TRUE.
+

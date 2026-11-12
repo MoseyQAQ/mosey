@@ -1,0 +1,106 @@
+############## workflow control ######################
+variable i index 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26
+variable VALUEZ  index -0.01 -0.02 -0.03 -0.04 -0.05 -0.04 -0.03 -0.02 -0.01 0.00 0.01 0.02 0.03 0.04 0.05
+label loop_label
+############## workflow control ######################
+
+variable        NSTEPS          equal 50000
+variable        THERMO_FREQ     equal 10
+variable        DUMP_FREQ       equal 10
+variable        TEMP            equal 300.0000
+variable        PRES            equal 0.000000
+variable        TAU_T           equal 0.100000
+variable        TAU_P           equal 0.500000
+
+units           metal
+boundary        p p p
+atom_style      atomic
+
+neighbor        2.0 bin
+neigh_modify    every 1
+
+############## read command ######################
+variable prev equal ${i}-1
+read_restart restart/restart.${prev}
+############## read command ######################
+
+############## print useful information ######################
+print "###########################################"
+print "index of run: ${i}"
+print "variable: ${VALUEZ}"
+print "###########################################"
+############## print useful information ######################
+
+mass            1 137.327000
+mass            2 207.200000
+mass            3 40.078000
+mass            4 87.620000
+mass            5 208.980400
+mass            6 39.098300
+mass            7 22.989700
+mass            8 178.490000
+mass            9 47.867000
+mass            10 91.224000
+mass            11 92.906000
+mass            12 23.305000
+mass            13 114.818000
+mass            14 65.409000
+mass            15 15.999400
+
+pair_style      deepmd /shared_storage/home/lidenan/CZH_PSZO/UniPero-v9.pb
+pair_coeff      * *
+
+# BECs are tensors. But here we assume charges are isotropic
+variable Z_A equal 3.53
+variable Z_B equal 5.50
+variable Z_O equal -3.01
+
+# electric field
+variable VALUEX  equal 0.00
+variable VALUEY  equal 0.00
+
+#define Pb Ti O
+group A type 2
+group B type 9 11 12
+group O type 15
+
+# force
+variable Afy equal ${Z_A}*${VALUEY}
+variable Bfy equal ${Z_B}*${VALUEY}
+variable Ofy equal ${Z_O}*${VALUEY}
+
+variable Afx equal ${Z_A}*${VALUEX}
+variable Bfx equal ${Z_B}*${VALUEX}
+variable Ofx equal ${Z_O}*${VALUEX}
+
+variable Afz equal ${Z_A}*${VALUEZ}
+variable Bfz equal ${Z_B}*${VALUEZ}
+variable Ofz equal ${Z_O}*${VALUEZ}
+
+thermo_style    custom step temp pe ke etotal press vol lx ly lz
+thermo          ${THERMO_FREQ}
+
+log             ${i}.log
+dump            1 all custom ${DUMP_FREQ} ${i}.lammpstrj id type x y z
+dump_modify     1 sort id
+
+# Apply field
+fix             2 A addforce ${Afx} ${Afy} ${Afz}
+fix             3 B addforce ${Bfx} ${Bfy} ${Bfz}
+fix             4 O addforce ${Ofx} ${Ofy} ${Ofz}
+
+if "${i} == 1" then "velocity        all create ${TEMP} 539619"
+fix             1 all npt temp ${TEMP} ${TEMP} ${TAU_T} aniso ${PRES} ${PRES} ${TAU_P}
+
+timestep        0.002000
+run             ${NSTEPS}
+
+write_restart    restart.${i}
+write_data       data.${i}
+
+############## workflow control ######################
+clear
+next i
+next VALUEZ
+jump SELF loop_label
+############## workflow control ######################

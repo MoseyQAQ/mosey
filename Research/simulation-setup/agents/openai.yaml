@@ -1,0 +1,4 @@
+interface:
+  display_name: "Simulation Setup"
+  short_description: "Adapt familiar simulation inputs and structures"
+  default_prompt: "Use $simulation-setup to prepare this calculation from relevant nearby cases or Mosey’s reference inputs."
